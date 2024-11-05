@@ -1,4 +1,4 @@
-from lib.util import s, t, n, num_to_white
+from lib.util import num_to_white
 
 t = "\t"
 n = "\n"
