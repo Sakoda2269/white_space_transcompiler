@@ -99,7 +99,7 @@ def parser(ope: str, args, ans: list):
     elif ope == "swap":
         swap(ans)
     elif ope == "pop":
-        swap(ans)
+        pop(ans)
     elif ope == "add":
         add(ans)
     elif ope == "sub":
