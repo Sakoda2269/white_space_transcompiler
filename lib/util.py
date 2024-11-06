@@ -59,4 +59,15 @@ def get_next_label():
     next_label -= 1
     return tmp
     
-
+def get_text(s):
+    ans = []
+    flg = False
+    for c in s:
+        if flg:
+            if c == "\"":
+                break
+            ans.append(c)
+        else:
+            if c == "\"":
+                flg = True
+    return "".join(ans)

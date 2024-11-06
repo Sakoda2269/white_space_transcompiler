@@ -164,16 +164,123 @@ def getLocalAddress(ans, args):
     loadFrom(ans, [-10])
     pointAdd(ans, [-10, args[0]])
 
+def sAdd(ans, args):
+    """
+    スタックの先頭に引数で指定した数字を足す
 
-def eval(ans, args):
+    足す数は変数でもよい
+    """
+    if util.is_digit(args[0]):
+        push(ans, [args[0]])
+    else:
+        namedLoad(ans, [args[0]])
+    add(ans)
+
+def sSub(ans, args):
+    """
+    スタックの先頭に引数で指定した数字を引く
+
+    引く数は変数でもよい
+    """
+    if util.is_digit(args[0]):
+        push(ans, [args[0]])
+    else:
+        namedLoad(ans, [args[0]])
+    sub(ans)
+
+def sMul(ans, args):
+    """
+    スタックの先頭に引数で指定した数字を掛ける
+
+    掛ける数は変数でもよい
+    """
+    if util.is_digit(args[0]):
+        push(ans, [args[0]])
+    else:
+        namedLoad(ans, [args[0]])
+    mul(ans)
+
+def rev(ans):
+    """
+    スタックの先頭が0ならば1に、1ならば0にする
+    """
+    sSub(ans, [1])
+    sMul(ans, [-1])
+
+def endl(ans):
+    """
+    改行を出力する
+
+    []
+    """
+    push(ans, [ord("\n")])
+    writeChar(ans)
+
+def printNuml(ans, args):
+    """
+    指定した数値を改行付きで出力する。指定しない場合はスタックのを数値として解釈し出力する。
+
+    数値は変数でもよい
+
+    [*数値]
+    """
+    if args[0] == "":
+        pass
+    elif util.is_digit(args[0]):
+        push(ans, [args[0]])
+    else:
+        namedLoad(ans, [args[0]])
+    writeNum(ans)
+    endl(ans)
+
+def printChar(ans, args):
+    """
+    指定した文字を出力する
+
+    ダブルクォーテーションで囲んでいない場合は変数と認識され、保存してあるものを文字と解釈し出力する
+
+    [文字]
+    """
+    if args[0][0] == "\"":
+        s = util.get_text(args[0])
+        push(ans, [ord(s)])
+    else:
+        namedLoad(ans, [args[0]])
+    writeChar(ans)
+
+def eval(ans, args, funcs):
     """
     引数を評価し、満たすなら1を、満たさないなら0をスタックの先頭に追加する
 
     v1, v2は数値または変数
 
-    operatorは =, >, <, !=のどれかである
+    operatorは =, >, >=, <=, <, !=のどれかである
 
     [v1, operator, v2]
     """
+    from lib.funcs import callIsEq, callIsGt, callIsGtE, callIsLt, callIsLtE, callIsNotEq
+    v1, ope, v2 = args
+    if ope == "=":
+        callIsEq(ans, [v1, v2], funcs)
+    elif ope == ">":
+        callIsGt(ans, [v1, v2], funcs)
+    elif ope == ">=":
+        callIsGtE(ans, [v1, v2], funcs)
+    elif ope == "<":
+        callIsLt(ans, [v1, v2], funcs)
+    elif ope == "<=":
+        callIsLtE(ans, [v1, v2], funcs)
+    elif ope == "!=":
+        callIsNotEq(ans, [v1, v2], funcs)
 
+def evalJump(ans, args, funcs):
+    """
+    [v1, operator, v2, oklabel, nglabel]
 
+    eval(v1, operator, v2)を満たすならoklabelへ、満たさないならnglabelへジャンプする
+    """
+
+    v1, ope, v2, ok, ng =args
+    eval(ans, [v1, ope, v2], funcs)
+    zeroJump(ans, [ng])
+    jump(ans, [ok])

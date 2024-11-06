@@ -184,7 +184,7 @@ def endSub(ans):
     ans.append(t)
     ans.append(n)
 
-def printChar(ans):
+def writeChar(ans):
     """
     スタックの先頭を文字として出力する
 
@@ -195,7 +195,7 @@ def printChar(ans):
     ans.append(s)
     ans.append(s)
 
-def printNum(ans):
+def writeNum(ans):
     """
     スタックの先頭を数字として出力する
 
